@@ -20,7 +20,7 @@ The Python example requires Python 3.11 or later and the dependencies in
 `examples/docx-python/requirements.txt`. See its
 [setup and conformance instructions](../examples/docx-python/README.md).
 
-The gate cases can be executed directly from the repository root:
+The gating tests can be executed directly from the repository root:
 
 ```sh
 node --test tools/conformance/test/harness.test.ts
@@ -30,7 +30,7 @@ node --test tools/conformance/test/cli.test.ts tools/conformance/test/containmen
 
 The Python case's `python3` must resolve to an interpreter with those
 dependencies installed when executing its `case.yaml` command. No generic
-case runner is included in this repository. These gate cases call no
+case runner is included in this repository. These gating tests call no
 model. Only a maintainer starts real-model `layer: eval` cases.
 
 Before finishing any task, run this scan and report its real exit code:
@@ -61,16 +61,16 @@ Each case declares:
 
 - `format: 1`, `id`, `feature`, and an `intent` explaining the guarantee.
 - A `layer` (`unit`, `gate`, `corpus`, or `eval`) and optional `dimension`.
-  Gate cases are deterministic and run before a task finishes; corpus
+  Gating tests are deterministic and run before a task finishes; corpus
   cases need separately obtained inputs; eval cases need a maintainer's launch.
 - `source`, including `kind`, `from`, and `license`. Inputs must be
   synthetic, owned, or redistributable. User files need recorded consent.
 - `input`, `steps`, at least one `expected` entry, and `since`.
 - Optional `reference`, `tolerance`, `tags`, `requires`, and `timeout_s`.
 
-This repository's gate cases use `exec: { cmd: [...] }` and an `exit`
+This repository's gating tests use `exec: { cmd: [...] }` and an `exit`
 expectation with `value: 0`. Commands run from the repository root; they
-must fail when the promised behavior is broken. Gate cases have a
+must fail when the promised behavior is broken. Gating tests have a
 default timeout of 20 seconds and a hard cap of 60 seconds. The total
 gate budget is `gate_budget_s`, at most 600 seconds. A missing required
 tool is a failure, never a skip. Run outputs belong in temporary folders
@@ -106,7 +106,7 @@ change to the maintainers. No expected-result changes may be merged
 automatically.
 
 Every bug fix starts with a failing regression case, then the fix. Every
-new feature adds a catalogue entry and at least one gate case. Stage
+new feature adds a catalogue entry and at least one gating test. Stage
 only files you changed, by name, because other contributors may share the
 checkout. Do not publish local paths, credentials, internal planning
 material, or unpublished research in the tree.

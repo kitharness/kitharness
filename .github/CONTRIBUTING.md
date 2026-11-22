@@ -1,7 +1,7 @@
 # Contributing to the Kit Harness Protocol
 
 Thank you for helping. This repository holds the KHP specification (`spec/`), the conformance
-checker (`tools/conformance/`), an example kit (`examples/docx-python/`), and their gate cases
+checker (`tools/conformance/`), an example kit (`examples/docx-python/`), and their gating tests
 (`cases/`, `features.yaml`).
 
 ## Before you start
@@ -22,7 +22,7 @@ checker (`tools/conformance/`), an example kit (`examples/docx-python/`), and th
   private repositories, or local paths in `spec/`.
 - Tests are the specification. A bug fix starts with a failing case under
   `cases/regressions/issue-<n>/`; a new feature adds an entry to `features.yaml` and at least one
-  gate case. Never edit expected results or loosen a test to make it pass.
+  gating test. Never edit expected results or loosen a test to make it pass.
 - Never write a local username, home directory, absolute path, secret, or token into a file.
   Links are repository-relative; command examples use placeholders such as `$REPO_ROOT`.
 

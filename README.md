@@ -228,7 +228,7 @@ The example kit's contract case runs with
 `"$KHP_PYTHON_ENV/bin/python" -B "$REPO_ROOT/examples/docx-python/test_example.py"` after the
 setup above.
 
-The feature catalogue is [features.yaml](features.yaml); the gate cases are under
+The feature catalogue is [features.yaml](features.yaml); the gating tests are under
 [cases/](cases/). [docs/quality.md](docs/quality.md) lists their commands, the required
 local-path scan, and the rules for expected results.
 
@@ -239,7 +239,7 @@ local-path scan, and the rules for expected results.
 | [spec/](spec/index.md) | The four specification pages |
 | [tools/conformance/](tools/conformance/README.md) | `khp check`, the conformance checker (`@kitharness/conformance`) |
 | [examples/docx-python/](examples/docx-python/README.md) | A basic-tier kit wrapping python-docx |
-| [cases/](cases/) and [features.yaml](features.yaml) | Gate cases and the feature catalogue |
+| [cases/](cases/) and [features.yaml](features.yaml) | Gating tests and the feature catalogue |
 | [CHANGES.md](CHANGES.md) | Version history and retired requirement ids |
 
 The repository's home is [github.com/kitharness/kitharness](https://github.com/kitharness/kitharness).

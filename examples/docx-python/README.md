@@ -180,7 +180,7 @@ path containment, link containment and string probes. It also checks every
 phase for canary leakage and unintended writes outside the workspace,
 including the A58 runtime canary. It does not test previews or layout at
 basic. Although the server exposes create/export, the checker only tests
-their collision behavior at Agent-ready; the gate case below covers it
+their collision behavior at Agent-ready; the gating test below covers it
 here. Do not use `--no-probes` for the conformance run.
 
 Run the added gate contract case with the same environment:

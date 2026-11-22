@@ -253,7 +253,7 @@ for runtime designation, tool exposure and model merge attempts, exact
 session results and file metadata, preview sources, unsolicited fixes,
 injected commands, drafts, errors, check replay and restart behavior. It
 also covers missing evidence, startup/deadline failures, CLI mode conflicts
-and persisted reports. The gate case is
+and persisted reports. The gating test is
 `khp.conformance.harness/scripted-contract`.
 
 `test/cli.test.ts` covers installed-package symlinks and paths with spaces

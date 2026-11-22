@@ -15,7 +15,7 @@
 - Never weaken a test to make it pass: no deleted or loosened assertions, no added
   `#[ignore]`, `.skip`, `.only` or `.todo`, no raised tolerances.
 - Every bug fix starts with a failing case under `cases/regressions/issue-<n>/`, then the fix.
-- Every new feature adds an entry to `features.yaml` and at least one gate case.
+- Every new feature adds an entry to `features.yaml` and at least one gating test.
 - Use plain-English commit messages that describe the change.
 - Stage only your own files: `git add` them by name; never `git commit -a` or `git add -A`.
   Other sessions may have uncommitted work in the same checkout.
