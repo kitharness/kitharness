@@ -21,6 +21,13 @@
   index", meant 1.0 in KHP 1.0 but would have meant 1.1 in this edition,
   which `khp check` refuses and no kit declares; the new wording keeps K2's
   KHP 1.0 meaning.
+- The fixtures folder of a kit's expected previews and their tolerance is
+  `conformance/expected/` (`expected/basic.png`, `expected/basic-scale-2.png`,
+  `expected/tolerance.json`); it was renamed before KHP's first public
+  release, so `khp check` reads only the new name and there is no
+  deprecation period. The KHP version, the kit-layer version (1.0) and a
+  kit's `"khp": "1.0"` stay as they are: KHP and its formats keep version 1
+  until the first release.
 
 ## KHP 1.0 (initial protocol)
 

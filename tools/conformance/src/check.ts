@@ -996,9 +996,9 @@ async function verifyPhase(context: Context): Promise<PhaseResult> {
 
 async function previewPhase(context: Context): Promise<PhaseResult> {
   const phase = new Phase(7, 'preview')
-  const golden = path.join(context.fixtures, 'golden')
-  const tolerance = readTolerance(readJson(path.join(golden, 'tolerance.json')))
-  if (!fs.existsSync(path.join(golden, 'tolerance.json'))) phase.fail('golden/tolerance.json is missing')
+  const expected = path.join(context.fixtures, 'expected')
+  const tolerance = readTolerance(readJson(path.join(expected, 'tolerance.json')))
+  if (!fs.existsSync(path.join(expected, 'tolerance.json'))) phase.fail('expected/tolerance.json is missing')
   await withServer(context, phase, async (session) => {
     const inspect = tool(context, 'inspect')
     // A55: without `preview: true`, no image.
@@ -1025,14 +1025,14 @@ async function previewPhase(context: Context): Promise<PhaseResult> {
       }
     }
     const against = (actual: Picture | undefined, name: string, what: string) => {
-      const file = path.join(golden, name)
+      const file = path.join(expected, name)
       if (!actual) return
-      if (!fs.existsSync(file)) return phase.note(`golden/${name} is not there, so ${what} was not compared`)
+      if (!fs.existsSync(file)) return phase.note(`expected/${name} is not there, so ${what} was not compared`)
       const difference = compare(actual, decodePng(fs.readFileSync(file)), tolerance)
-      if (difference) phase.fail(`${what} differs from golden/${name}: ${difference} (A39)`)
+      if (difference) phase.fail(`${what} differs from expected/${name}: ${difference} (A39)`)
     }
     const whole = await picture({ path: context.basic }, 'preview of basic')
-    if (whole && !fs.existsSync(path.join(golden, 'basic.png'))) phase.fail('golden/basic.png is missing: the expected preview of basic, which shows it is framed to the content (A39)')
+    if (whole && !fs.existsSync(path.join(expected, 'basic.png'))) phase.fail('expected/basic.png is missing: the expected preview of basic, which shows it is framed to the content (A39)')
     against(whole, 'basic.png', 'the preview of basic')
     const double = await picture({ path: context.basic, scale: 2 }, 'preview at scale 2')
     if (whole && double && (Math.abs(double.width - 2 * whole.width) > 1 || Math.abs(double.height - 2 * whole.height) > 1)) {
@@ -1052,8 +1052,8 @@ async function previewPhase(context: Context): Promise<PhaseResult> {
         phase.fail(`the preview of ${target.file} at target ${stable(target.target)} is the whole preview: the target is not honoured (A24)`)
       }
     }
-    if (fs.existsSync(path.join(golden, 'basic-target.png'))) {
-      phase.note('golden/basic-target.png is not compared: KHP does not say which target it shows')
+    if (fs.existsSync(path.join(expected, 'basic-target.png'))) {
+      phase.note('expected/basic-target.png is not compared: KHP does not say which target it shows')
     }
   })
   return phase.result()

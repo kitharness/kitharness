@@ -20,7 +20,7 @@ paragraph to `basic.docx`. The generator refuses to replace an existing
 fixture; explicitly remove both generated DOCX files before regenerating.
 
 No `check-<code>.docx` files are needed: the catalogue is empty at basic.
-No preview goldens or `overflow.docx` are needed at this tier, even though
+No expected previews or `overflow.docx` are needed at this tier, even though
 DOCX is a paginated format (`agent.layout: true`). The example supplies no
 renderer and makes no Agent-ready claim. Run `khp check` only after both
 DOCX files exist; missing fixtures fail conformance.

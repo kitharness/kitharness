@@ -22,7 +22,7 @@ const KIT = `node ${JSON.stringify(path.join(here, 'fixture-kit.ts'))} --workspa
 type LinksDeclared = 'true' | 'false' | 'absent'
 
 /**
- * The counter kit's package: kit.json, agent/, and conformance/ with its golden previews; as a
+ * The counter kit's package: kit.json, agent/, and conformance/ with its expected previews; as a
  * layout kit (`layout`, see the fixture's LAYOUTS) also `overflow.counter`. `declared` is what its
  * manifest says of `agent.links`, and `basicLinks` makes `basic.counter` link another counter.
  */
@@ -37,7 +37,7 @@ function counterPackage(claim?: Level, layout?: string, links = true, declared: 
   fs.writeFileSync(path.join(root, 'agent', 'checks.json'), JSON.stringify(catalogue(layout)))
   fs.writeFileSync(path.join(root, 'agent', 'guide.md'), '# Counter\n')
   const fixtures = path.join(root, 'conformance')
-  fs.mkdirSync(path.join(fixtures, 'golden'), { recursive: true })
+  fs.mkdirSync(path.join(fixtures, 'expected'), { recursive: true })
   const basic = { title: 'Basic', count: 3, ...(basicLinks ? { link: ['check-negative.counter'] } : {}) }
   fs.writeFileSync(path.join(fixtures, 'basic.counter'), JSON.stringify(basic))
   fs.writeFileSync(path.join(fixtures, 'check-negative.counter'), JSON.stringify({ title: 'Below zero', count: -2 }))
@@ -48,9 +48,9 @@ function counterPackage(claim?: Level, layout?: string, links = true, declared: 
     fs.writeFileSync(path.join(fixtures, 'links-outside.counter'), JSON.stringify({ title: 'Links', count: 1, link }))
   }
   fs.writeFileSync(path.join(fixtures, 'edit.json'), JSON.stringify({ steps: [{ command: 'count.add', params: { by: 2 } }] }))
-  fs.writeFileSync(path.join(fixtures, 'golden', 'basic.png'), render(basic))
-  fs.writeFileSync(path.join(fixtures, 'golden', 'basic-scale-2.png'), render(basic, { scale: 2 }))
-  fs.writeFileSync(path.join(fixtures, 'golden', 'tolerance.json'), JSON.stringify({ maxChannelDelta: 0, maxDifferentPixels: 0 }))
+  fs.writeFileSync(path.join(fixtures, 'expected', 'basic.png'), render(basic))
+  fs.writeFileSync(path.join(fixtures, 'expected', 'basic-scale-2.png'), render(basic, { scale: 2 }))
+  fs.writeFileSync(path.join(fixtures, 'expected', 'tolerance.json'), JSON.stringify({ maxChannelDelta: 0, maxDifferentPixels: 0 }))
   return root
 }
 
@@ -77,6 +77,8 @@ interface CheckCase {
   basicLinks?: boolean
   /** What the package's kit.json says in `khp` (K2; default the fixture's). */
   khp?: string
+  /** Leave out `conformance/expected/`, the expected previews and their tolerance. */
+  withoutExpected?: boolean
 }
 
 /**
@@ -89,6 +91,7 @@ interface CheckCase {
  */
 async function check(options: CheckCase = {}): Promise<{ report: Report; exit: number }> {
   const pkg = counterPackage(options.claim, options.layout, options.links ?? true, options.declared ?? 'true', options.basicLinks ?? false, options.khp)
+  if (options.withoutExpected) fs.rmSync(path.join(pkg, 'conformance', 'expected'), { recursive: true })
   // Under /tmp where there is one, as khp check's own default, so a socket path in the kit's TMPDIR stays short.
   const base = process.platform !== 'win32' && fs.existsSync('/tmp') ? '/tmp' : os.tmpdir()
   const testRoot = fs.realpathSync(fs.mkdtempSync(path.join(base, 'khp-test-')))
@@ -184,6 +187,17 @@ describe('khp check catches each broken phase', () => {
     const { report, exit } = await check({ broken: 'start' })
     assert.equal(exit, 2)
     assert.equal(report.passed, false)
+  })
+})
+
+describe('the expected previews are conformance/expected/ (A39)', () => {
+  test('without conformance/expected/ the preview phase fails and names the files it needs there', async () => {
+    const { report, exit } = await check({ withoutExpected: true })
+    assert.equal(exit, 1, format(report))
+    assert.deepEqual(failed(report), ['preview'], format(report))
+    const failures = report.phases.find((phase) => phase.name === 'preview')?.failures.join('\n') ?? ''
+    assert.match(failures, /expected\/tolerance\.json is missing/, failures)
+    assert.match(failures, /expected\/basic\.png is missing: the expected preview of basic/, failures)
   })
 })
 

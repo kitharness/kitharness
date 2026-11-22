@@ -1,4 +1,4 @@
-// Previews: decoding, uniformity (A39) and comparison with golden images within a tolerance.
+// Previews: decoding, uniformity (A39) and comparison with the expected previews within a tolerance.
 
 import { PNG } from 'pngjs'
 
@@ -30,7 +30,7 @@ export function uniformity(picture: Picture): string | undefined {
 }
 
 /**
- * The tolerance a kit states in `golden/tolerance.json`. KHP does not fix its keys; khp check
+ * The tolerance a kit states in `expected/tolerance.json`. KHP does not fix its keys; khp check
  * reads `maxChannelDelta` (the largest difference of one channel that still counts as equal) and
  * `maxDifferentPixels` (how many pixels may differ by more), both 0 when absent.
  */
@@ -48,7 +48,7 @@ export function readTolerance(value: unknown): Tolerance {
 /** Why `actual` differs from `expected` beyond the tolerance, or undefined when it does not. */
 export function compare(actual: Picture, expected: Picture, tolerance: Tolerance): string | undefined {
   if (actual.width !== expected.width || actual.height !== expected.height) {
-    return `the preview is ${actual.width} × ${actual.height}, the golden image ${expected.width} × ${expected.height}`
+    return `the preview is ${actual.width} × ${actual.height}, the expected preview ${expected.width} × ${expected.height}`
   }
   let different = 0
   for (let i = 0; i < actual.data.length; i += 4) {
